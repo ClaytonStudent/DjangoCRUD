@@ -18,6 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # all employee requests mapping to url file in the folder employee_register
     path('employee/', include('employee_register.urls')),
 
 ]

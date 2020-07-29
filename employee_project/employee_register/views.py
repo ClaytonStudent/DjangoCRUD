@@ -1,26 +1,35 @@
 from django.shortcuts import render, redirect
 from .forms import EmployeeForm
 from .models import Employee
-# Create your views here.
 
 def employee_list(request):
+    '''
+    List all Employee stored in DB
+    '''
     context = {'employee_list':Employee.objects.all()}
     return render(request,"employee_register/employee_list.html",context)
 
 def employee_form(request, id=0):
-    # if the method is get, direct to form view
+    '''
+    View for employee form
+    Deal with all requests to employee form.
+    Including GET and POST
+    '''
+    # when method is GET
     if request.method == 'GET':
         if id == 0:
             form = EmployeeForm()
         else:
             employee = Employee.objects.get(pk=id)
             form = EmployeeForm(instance = employee)
-        #form = EmployeeForm()
         return render(request,"employee_register/employee_form.html",{'form':form})
-    # method is post, save the new employee and redirect to list view
+    
+    # When method is POST/PUT
     else:
+        # creat new form
         if id == 0:
             form = EmployeeForm(request.POST)
+        # update an existing form
         else:
             employee = Employee.objects.get(pk=id)
             form = EmployeeForm(request.POST,instance = employee)
@@ -29,6 +38,9 @@ def employee_form(request, id=0):
         return redirect('/employee/list')
 
 def employee_delete(request,id=0):
+    '''
+    View for delete
+    '''
     employee = Employee.objects.get(pk=id)
     employee.delete()
     return redirect('/employee/list') 
